@@ -367,66 +367,135 @@ ISR(PCINT1_vect)
     }
 
     /**********************/
+    /* Checking channel C */
+    /**********************/
+    switch(channelStateC)
+    {
+        case ST_START_C:
+        /* Searching for initial state */
+        if(nextPinStateC == ST_PIN_00_C)
+        {
+            channelStateC = ST_WAIT_C;
+            curPinStateC = nextPinStateC;
+        }
+        break;
+        
+        case ST_WAIT_C:
+        if(nextPinStateC != curPinStateC)
+        {
+            diffC = 0;
+            fixedDiffC = 0;
+            
+            switch(nextPinStateC)
+            {
+                case ST_PIN_01_C:
+                channelStateC = ST_MEASURE_MINUS_C;
+                break;
+                
+                case ST_PIN_10_C:
+                channelStateC = ST_MEASURE_PLUS_C;
+                break;
+                
+                case ST_PIN_11_C:
+                default:
+                channelStateC = ST_START_C;
+                break;
+
+            }
+
+            curPinStateC = nextPinStateC;
+        }
+        break;
+        
+        case ST_MEASURE_PLUS_C:
+        case ST_MEASURE_MINUS_C:
+        if(nextPinStateC != curPinStateC)
+        {   /* Switching to next state */
+            channelStateC = ST_START_C;
+
+            if(nextPinStateC == ST_PIN_11_C)
+            {
+                fixedDiffC = diffC;
+            }
+            else
+            {
+                diffC = 0;
+                fixedDiffC = 0;
+            }
+
+            curPinStateC = nextPinStateC;
+        }
+        break;
+        
+        default:
+        break;
+        
+    }
+
+    /**********************/
     /* Checking channel B */
     /**********************/
-
+    
     switch(channelStateB)
-    {
-        case ST_START_B:
-            /* Searching for initial state */
+    {   
+        case ST_START_B:    
+        /* Searching for initial state */
             if(nextPinStateB == ST_PIN_00_B)
             {
                 channelStateB = ST_WAIT_B;
+                curPinStateB = nextPinStateB;
             }
-            break;
+        break;
             
         case ST_WAIT_B:
-            if (nextPinStateB != curPinStateB)
+            if(nextPinStateB != curPinStateB)
             {
-        
+                diffB = 0;
+                fixedDiffB = 0;
+                
+                switch(nextPinStateB)
+                {
+                    case ST_PIN_01_B:
+                        channelStateB = ST_MEASURE_MINUS_B;
+                        break;
+                            
+                    case ST_PIN_10_B:
+                        channelStateB = ST_MEASURE_PLUS_B;
+                        break;
+                            
+                    case ST_PIN_11_B:
+                    default:
+                        channelStateB = ST_START_B;
+                        break;
+
+                }                        
+
+                curPinStateB = nextPinStateB;
             }
             break;
             
         case ST_MEASURE_PLUS_B:
-            break;
-            
         case ST_MEASURE_MINUS_B:
-            break;
-            
-        default:
-            break;
-            
-    }
+            if(nextPinStateB != curPinStateB)
+            {   /* Switching to next state */
+                channelStateB = ST_START_B;
 
-    /**********************/
-    /* Checking channel C */
-    /**********************/
-    
-    switch(channelStateC)
-    {
-        case ST_START_C:
-            /* Searching for initial state */
-            if(nextPinStateC == ST_PIN_00_C)
-            {
-                channelStateC = ST_WAIT_C;
+                if(nextPinStateB == ST_PIN_11_B)
+                {
+                    fixedDiffB = diffB;
+                }
+                else
+                {
+                    diffB = 0;
+                    fixedDiffB = 0;
+                }                        
+
+                curPinStateB = nextPinStateB;
             }
             break;
             
-        case ST_WAIT_C:
-            if (nextPinStateC != curPinStateC)
-            {
-        
-            }
-            break;
-            
-        case ST_MEASURE_PLUS_C:
-            break;
-            
-        case ST_MEASURE_MINUS_C:
-            break;
-        
         default:
             break;
+        
     }
-    
 }
