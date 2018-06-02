@@ -17,6 +17,7 @@
 /* CONSTANTS                                                            */
 /************************************************************************/
 
+#define OCR_MIDDLE_VALUE    156
 
 /************************************************************************/
 /* MACROS                                                               */
@@ -37,7 +38,7 @@
 int main(void)
 {
     // Initializing IO ports
-    DDRB = 0x0f;
+    DDRB = (1 << PORTB1) + (1 << PORTB2);
     PORTB = 0xff;
 
     /**********************************/
@@ -56,16 +57,14 @@ int main(void)
     /*                               */
     /* Clock prescaler = 1024        */
     /* OC mode: clear on compare     */
-    /* PWM: 10 bit, A, B, WGM = 0111 */
+    /* PWM: 9 bit, A, B, WGM = 0110  */
     /*********************************/
 
-    TCCR1A = (1 << COM1B1) + (1 << COM1A1) + (1 << WGM10) + (1 << WGM11);
+    TCCR1A = (1 << COM1B1) + (1 << COM1B0) + (1 << COM1A1) + (1 << COM1A0) + (1 << WGM11);
     TCCR1B = (1 << WGM12) + (1 << CS12) + (1 << CS10);
     TCCR1C = 0;
 
-    OCR1A = ZERO_DIFF;    // Channel A: set difference = 0
-    OCR1B = ZERO_DIFF;    // Channel B: set difference = 0
-
+    OCR1A = OCR_MIDDLE_VALUE;
 
     sei();
     StartConvAdc();
@@ -84,7 +83,10 @@ int main(void)
 
 ISR(ADC_vect)
 {
-    unsigned char AdcBuf = ADCH;
+    unsigned int adcBuf = ADC;
+    
+    adcBuf = adcBuf * 10 / 33;
+    OCR1B = adcBuf;
     
     // Restarting AD conversion before exit
     StartConvAdc();
