@@ -226,48 +226,18 @@ int main(void)
     {        
         if(channelStateA == ST_START_A || channelStateA == ST_WAIT_A)
         {
-            if(diffA > maxDiffValue)
-            {
-                diffA = maxDiffValue;
-            }
-
-            if(diffA < (-1* maxDiffValue))
-            {
-                diffA = (-1* maxDiffValue);
-            }
-            
             outValueA = ( ((long)(fixedDiffA + maxDiffValue)) << 8) / (maxDiffValue << 1);
             OCR1A = outValueA ;    // Channel A: set difference = 0
         }            
 
         if(channelStateB == ST_START_B || channelStateB == ST_WAIT_B)
         {
-            if(diffB < (-1* maxDiffValue))
-            {
-                diffB = (-1* maxDiffValue);
-            }
-        
-            if(diffB > maxDiffValue)
-            {
-                diffB = maxDiffValue;
-            }
-
             outValueB = ( ((long)(fixedDiffB + maxDiffValue)) << 8) / (maxDiffValue << 1);
             OCR1B = outValueB;    // Channel B: set difference = 0
         }            
 
         if(channelStateC == ST_START_C || channelStateC == ST_WAIT_C)
         {
-            if(diffC > maxDiffValue)
-            {
-                diffC = maxDiffValue;
-            }
-        
-            if(diffC < (-1* maxDiffValue))
-            {
-                diffC = (-1* maxDiffValue);
-            }
-
             outValueC = ( ((long)(fixedDiffC + maxDiffValue)) << 8) / (maxDiffValue << 1);
             OCR2A = outValueC;    // Channel C: set difference = 0
         }            
@@ -379,6 +349,16 @@ ISR(PCINT1_vect)
 
                 if(nextPinStateA == ST_PIN_11_A)
                 {
+                    if(diffA > maxDiffValue)
+                    {
+                        diffA = maxDiffValue;
+                    }
+
+                    if(diffA < (-1* maxDiffValue))
+                    {
+                        diffA = (-1* maxDiffValue);
+                    }
+            
                     fixedDiffA = diffA;
                 }
                 else
@@ -445,6 +425,16 @@ ISR(PCINT1_vect)
 
             if(nextPinStateC == ST_PIN_11_C)
             {
+                if(diffC > maxDiffValue)
+                {
+                    diffC = maxDiffValue;
+                }
+            
+                if(diffC < (-1* maxDiffValue))
+                {
+                    diffC = (-1* maxDiffValue);
+                }
+                
                 fixedDiffC = diffC;
             }
             else
@@ -512,6 +502,16 @@ ISR(PCINT1_vect)
 
                 if(nextPinStateB == ST_PIN_11_B)
                 {
+                    if(diffB < (-1* maxDiffValue))
+                    {
+                        diffB = (-1* maxDiffValue);
+                    }
+            
+                    if(diffB > maxDiffValue)
+                    {
+                        diffB = maxDiffValue;
+                    }
+
                     fixedDiffB = diffB;
                 }
                 else
