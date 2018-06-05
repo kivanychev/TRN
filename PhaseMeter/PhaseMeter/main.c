@@ -427,7 +427,7 @@ ISR(PCINT1_vect)
             {
                 if(diffC >= maxDiffValue)
                 {
-                    diffC = maxDiffValue -1;
+                    diffC = maxDiffValue - 1;
                 }
             
                 if(diffC < (-1* maxDiffValue))
@@ -504,7 +504,7 @@ ISR(PCINT1_vect)
                 {
                     if(diffB >= maxDiffValue)
                     {
-                        diffB = maxDiffValue;
+                        diffB = maxDiffValue - 1;
                     }
 
                     if(diffB < (-1* maxDiffValue))
