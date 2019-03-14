@@ -55,13 +55,13 @@ int main(void)
     /*********************************/
     /* Initialize Timer1             */
     /*                               */
-    /* Clock prescaler = 1024        */
+    /* Clock prescaler = 256         */         //Changed from 1024
     /* OC mode: clear on compare     */
     /* PWM: 9 bit, A, B, WGM = 0110  */
     /*********************************/
 
     TCCR1A = (1 << COM1B1) + (1 << COM1B0) + (1 << COM1A1) + (1 << COM1A0) + (1 << WGM11);
-    TCCR1B = (1 << WGM12) + (1 << CS12) + (1 << CS10);
+    TCCR1B = (1 << WGM12) + (1 << CS12);        // + (1 << CS10);  -- Changed from 1024 to 256
     TCCR1C = 0;
 
     OCR1A = OCR_MIDDLE_VALUE;

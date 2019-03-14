@@ -21,13 +21,14 @@
 // Timer period in mks
 // Test: Check if timer interrupt is done every TIMER_PERIOD
 #define TIMER_PERIOD    10  // us
-#define MAX_ANGLE       90  // degrees
+#define MAX_ANGLE       30  // degrees
 
 // Masks for channel pins
 #define MASK_A 0b00000011
 #define MASK_B 0b00001100
 #define MASK_C 0b00110000
 
+// Value for OCRx when difference is 0
 #define ZERO_DIFF   127
 
 /************************************************************************/
